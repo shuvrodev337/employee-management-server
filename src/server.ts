@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // Connectivity function
 async function main() {
   try {
-    // await mongoose.connect(config.database_url as string);
+    await mongoose.connect(config.database_url as string);
 
     app.listen(config.port, () => {
       console.log(`Express mongodb starter app listening on  ${config.port}`);
