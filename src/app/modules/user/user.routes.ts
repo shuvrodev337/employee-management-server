@@ -1,9 +1,7 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { UserController } from './user.controller';
 const router = express.Router();
-const getAController = (req: Request, res: Response) => {
-  const a = 'Hello from demo';
-  res.send(a);
-};
-router.get('/demo', getAController);
+
+router.post('/create-employee', UserController.createEmployee);
 
 export const UserRoutes = router;
