@@ -3,5 +3,6 @@ import { UserController } from './user.controller';
 const router = express.Router();
 
 router.post('/create-employee', UserController.createEmployee);
+router.post('/create-admin', UserController.createAdmin);
 
 export const UserRoutes = router;

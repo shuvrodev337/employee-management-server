@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IEmployee } from './employee.interface';
-import { TUserName } from '../admin/admin.interface';
+import { IAdmin, TUserName } from './admin.interface';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -17,7 +16,7 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const employeeSchema = new Schema<IEmployee>(
+const adminSchema = new Schema<IAdmin>(
   {
     id: {
       type: String,
@@ -78,6 +77,7 @@ const employeeSchema = new Schema<IEmployee>(
       type: Boolean,
       default: false,
     },
+
     // // 🏬 Organization Structure
     // department: {
     //   type: Types.ObjectId,
@@ -110,4 +110,4 @@ const employeeSchema = new Schema<IEmployee>(
 // employeeSchema.index({ manager: 1 });
 // employeeSchema.index({ isDeleted: 1 });
 
-export const Employee = model<IEmployee>('Employee', employeeSchema);
+export const Admin = model<IAdmin>('Admin', adminSchema);

@@ -1,18 +1,14 @@
 import { Types } from 'mongoose';
+import { TBloodGroup, TGender, TUserName } from '../admin/admin.interface';
 
-export type TUserName = {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-};
 export interface IEmployee {
   id: string;
   user: Types.ObjectId;
 
   name: TUserName;
-  gender: 'male' | 'female' | 'other';
+  gender: TGender;
   dateOfBirth: Date;
-  bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  bloodGroup?: TBloodGroup;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
