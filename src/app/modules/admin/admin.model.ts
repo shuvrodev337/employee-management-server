@@ -21,7 +21,7 @@ const adminSchema = new Schema<IAdmin>(
     id: {
       type: String,
       required: [true, 'ID is required'],
-      //  unique: true,
+      unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -38,7 +38,7 @@ const adminSchema = new Schema<IAdmin>(
       },
       required: [true, 'Gender is required'],
     },
-    dateOfBirth: { type: Date },
+    dateOfBirth: { type: Date, required: [true, 'Date of birth is required'] },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -89,12 +89,6 @@ const adminSchema = new Schema<IAdmin>(
     //   type: Types.ObjectId,
     //   ref: "Designation",
     //   required: true,
-    // },
-
-    // manager: {
-    //   type: Types.ObjectId,
-    //   ref: "Employee",
-    //   default: null,
     // },
   },
   {

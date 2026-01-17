@@ -33,6 +33,11 @@ const createEmployeeIntoDB = async (
 
     employeeData.id = newUser[0].id;
     employeeData.user = newUser[0]._id;
+    //dates are taken as string from http request but  saved as Date objects to DB.
+    employeeData.dateOfBirth =
+      employeeData.dateOfBirth && new Date(employeeData.dateOfBirth);
+    employeeData.joiningDate =
+      employeeData.joiningDate && new Date(employeeData.joiningDate);
 
     const newEmployee = await Employee.create([employeeData], { session });
     if (!newEmployee.length) {
@@ -70,6 +75,10 @@ const createAdminIntoDB = async (password: string, adminData: TNewAdmin) => {
 
     adminData.id = newUser[0].id;
     adminData.user = newUser[0]._id;
+    adminData.dateOfBirth =
+      adminData.dateOfBirth && new Date(adminData.dateOfBirth);
+    adminData.joiningDate =
+      adminData.joiningDate && new Date(adminData.joiningDate);
     const newAdmin = await Admin.create([adminData], { session });
     if (!newAdmin.length) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create admin!');

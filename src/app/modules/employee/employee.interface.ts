@@ -7,15 +7,15 @@ export interface IEmployee {
 
   name: TUserName;
   gender: TGender;
-  dateOfBirth: Date;
-  bloodGroup?: TBloodGroup;
+  dateOfBirth: Date | string;
+  bloodGroup: TBloodGroup;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
 
   presentAddress: string;
   permanentAddress: string;
-  joiningDate: Date;
+  joiningDate: Date | string;
   employmentType: 'permanent' | 'partTime' | 'internship' | 'contractual';
 
   isDeleted?: boolean;

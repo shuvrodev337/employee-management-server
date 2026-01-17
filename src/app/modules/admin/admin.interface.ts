@@ -22,12 +22,12 @@ export interface IAdmin {
   user: Types.ObjectId;
   name: TUserName;
   gender: TGender;
-  dateOfBirth?: Date;
-  joiningDate: Date;
+  dateOfBirth: Date | string;
+  joiningDate: Date | string;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloodGroup?: TBloodGroup;
+  bloodGroup: TBloodGroup;
   presentAddress: string;
   permanentAddress: string;
   employmentType: 'permanent' | 'partTime' | 'internship' | 'contractual';

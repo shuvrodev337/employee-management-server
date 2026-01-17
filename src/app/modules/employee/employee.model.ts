@@ -22,7 +22,7 @@ const employeeSchema = new Schema<IEmployee>(
     id: {
       type: String,
       required: [true, 'ID is required'],
-      //  unique: true,
+      unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
