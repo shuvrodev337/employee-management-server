@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IEmployee } from './employee.interface';
+import { EmployeeModel, IEmployee } from './employee.interface';
 import { TUserName } from '../admin/admin.interface';
 
 const userNameSchema = new Schema<TUserName>({
@@ -17,7 +17,7 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const employeeSchema = new Schema<IEmployee>(
+const employeeSchema = new Schema<IEmployee, EmployeeModel>(
   {
     id: {
       type: String,
@@ -110,4 +110,33 @@ const employeeSchema = new Schema<IEmployee>(
 // employeeSchema.index({ manager: 1 });
 // employeeSchema.index({ isDeleted: 1 });
 
-export const Employee = model<IEmployee>('Employee', employeeSchema);
+// generating full name
+employeeSchema.virtual('fullName').get(function () {
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
+});
+
+// filter out deleted documents
+employeeSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+employeeSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+employeeSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+//checking if user is already exist!
+employeeSchema.statics.doesEmployeeExist = async function (_id: string) {
+  const existingEmployee = await Employee.findById(_id);
+  return existingEmployee;
+};
+export const Employee = model<IEmployee, EmployeeModel>(
+  'Employee',
+  employeeSchema,
+);

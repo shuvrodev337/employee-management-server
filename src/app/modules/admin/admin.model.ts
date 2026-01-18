@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IAdmin, TUserName } from './admin.interface';
+import { AdminModel, IAdmin, TUserName } from './admin.interface';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -16,7 +16,7 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const adminSchema = new Schema<IAdmin>(
+const adminSchema = new Schema<IAdmin, AdminModel>(
   {
     id: {
       type: String,
@@ -97,11 +97,30 @@ const adminSchema = new Schema<IAdmin>(
   },
 );
 
-// // 🔎 Indexes (Performance)
-// employeeSchema.index({ email: 1 });
-// employeeSchema.index({ department: 1 });
-// employeeSchema.index({ designation: 1 });
-// employeeSchema.index({ manager: 1 });
-// employeeSchema.index({ isDeleted: 1 });
+// generating full name
+adminSchema.virtual('fullName').get(function () {
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
+});
 
-export const Admin = model<IAdmin>('Admin', adminSchema);
+// filter out deleted documents
+adminSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+adminSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+adminSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+//checking if admin already exists!
+adminSchema.statics.doesAdminExist = async function (_id: string) {
+  const existingAdmin = await Admin.findById(_id);
+  return existingAdmin;
+};
+export const Admin = model<IAdmin, AdminModel>('Admin', adminSchema);

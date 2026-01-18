@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export type TGender = 'male' | 'female' | 'other';
 export type TBloodGroup =
@@ -35,4 +35,9 @@ export interface IAdmin {
   //   department: Types.ObjectId;
   //   designation: Types.ObjectId;
 }
+export interface AdminModel extends Model<IAdmin> {
+  // eslint-disable-next-line no-unused-vars
+  doesAdminExist(_id: string): Promise<IAdmin | null>;
+}
+
 export type TNewAdmin = Partial<IAdmin>;
