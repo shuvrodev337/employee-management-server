@@ -79,25 +79,25 @@ const employeeSchema = new Schema<IEmployee, EmployeeModel>(
       default: false,
     },
     // // 🏬 Organization Structure
-    // organization: {
-    //   type: Types.ObjectId,
-    //   ref: "Organization",
-    //   required: true,
-    // },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
     // department: {
-    //   type: Types.ObjectId,
+    //   type: Schema.Types.ObjectId,
     //   ref: "Department",
     //   required: true,
     // },
 
     // designation: {
-    //   type: Types.ObjectId,
+    //   type: Schema.Types.ObjectId,
     //   ref: "Designation",
     //   required: true,
     // },
 
     // manager: {
-    //   type: Types.ObjectId,
+    //   type: Schema.Types.ObjectId,
     //   ref: "Employee",
     //   default: null,
     // },

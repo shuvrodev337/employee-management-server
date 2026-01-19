@@ -130,7 +130,7 @@ organizationAdminSchema.pre('aggregate', function (next) {
   next();
 });
 
-//checking if admin already exists!
+//checking if organization admin  exists!
 organizationAdminSchema.statics.doesOrganizationAdminExist = async function (
   _id: string,
 ) {

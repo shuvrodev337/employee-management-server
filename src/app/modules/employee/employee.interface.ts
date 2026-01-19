@@ -19,7 +19,7 @@ export interface IEmployee {
   employmentType: 'permanent' | 'partTime' | 'internship' | 'contractual';
 
   isDeleted?: boolean;
-  //organization : Types.ObjectId;
+  organization: Types.ObjectId;
   //   department: Types.ObjectId;
   //   designation: Types.ObjectId;
   //   manager?: Types.ObjectId;
