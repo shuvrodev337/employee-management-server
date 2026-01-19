@@ -1,5 +1,8 @@
-import { Schema, model } from 'mongoose';
-import { EmployeeModel, IEmployee } from './employee.interface';
+import { Schema, Types, model } from 'mongoose';
+import {
+  IOrganizationAdmin,
+  OrganizationAdminModel,
+} from './organizationAdmin.interface';
 import { TUserName } from '../admin/admin.interface';
 
 const userNameSchema = new Schema<TUserName>({
@@ -17,7 +20,10 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const employeeSchema = new Schema<IEmployee, EmployeeModel>(
+const organizationAdminSchema = new Schema<
+  IOrganizationAdmin,
+  OrganizationAdminModel
+>(
   {
     id: {
       type: String,
@@ -39,7 +45,7 @@ const employeeSchema = new Schema<IEmployee, EmployeeModel>(
       },
       required: [true, 'Gender is required'],
     },
-    dateOfBirth: { type: Date },
+    dateOfBirth: { type: Date, required: [true, 'Date of birth is required'] },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -69,37 +75,32 @@ const employeeSchema = new Schema<IEmployee, EmployeeModel>(
       type: Date,
       required: true,
     },
-    employmentType: {
+    ownershipType: {
       type: String,
-      enum: ['permanent', 'partTime', 'internship', 'contractual'],
+      enum: ['founder', 'co-founder', 'partner'],
       required: true,
     },
     isDeleted: {
       type: Boolean,
       default: false,
     },
+
     // // 🏬 Organization Structure
-    // organization: {
-    //   type: Types.ObjectId,
-    //   ref: "Organization",
-    //   required: true,
-    // },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
     // department: {
-    //   type: Types.ObjectId,
+    //   type:  Schema.Types.ObjectId,
     //   ref: "Department",
     //   required: true,
     // },
 
     // designation: {
-    //   type: Types.ObjectId,
+    //   type:  Schema.Types.ObjectId,
     //   ref: "Designation",
     //   required: true,
-    // },
-
-    // manager: {
-    //   type: Types.ObjectId,
-    //   ref: "Employee",
-    //   default: null,
     // },
   },
   {
@@ -108,40 +109,35 @@ const employeeSchema = new Schema<IEmployee, EmployeeModel>(
   },
 );
 
-// // 🔎 Indexes (Performance)
-// employeeSchema.index({ email: 1 });
-// employeeSchema.index({ department: 1 });
-// employeeSchema.index({ designation: 1 });
-// employeeSchema.index({ manager: 1 });
-// employeeSchema.index({ isDeleted: 1 });
-
 // generating full name
-employeeSchema.virtual('fullName').get(function () {
+organizationAdminSchema.virtual('fullName').get(function () {
   return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 });
 
 // filter out deleted documents
-employeeSchema.pre('find', function (next) {
+organizationAdminSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-employeeSchema.pre('findOne', function (next) {
+organizationAdminSchema.pre('findOne', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-employeeSchema.pre('aggregate', function (next) {
+organizationAdminSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 
-//checking if user is already exist!
-employeeSchema.statics.doesEmployeeExist = async function (_id: string) {
-  const existingEmployee = await Employee.findById(_id);
-  return existingEmployee;
+//checking if admin already exists!
+organizationAdminSchema.statics.doesOrganizationAdminExist = async function (
+  _id: string,
+) {
+  const existingOrganizationAdmin = await OrganizationAdmin.findById(_id);
+  return existingOrganizationAdmin;
 };
-export const Employee = model<IEmployee, EmployeeModel>(
-  'Employee',
-  employeeSchema,
-);
+export const OrganizationAdmin = model<
+  IOrganizationAdmin,
+  OrganizationAdminModel
+>('OrganizationAdmin', organizationAdminSchema);

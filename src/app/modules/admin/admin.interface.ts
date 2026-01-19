@@ -32,6 +32,7 @@ export interface IAdmin {
   permanentAddress: string;
   employmentType: 'permanent' | 'partTime' | 'internship' | 'contractual';
   isDeleted: boolean;
+  organization: Types.ObjectId;
   //   department: Types.ObjectId;
   //   designation: Types.ObjectId;
 }

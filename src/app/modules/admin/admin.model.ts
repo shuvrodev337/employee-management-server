@@ -79,14 +79,19 @@ const adminSchema = new Schema<IAdmin, AdminModel>(
     },
 
     // // 🏬 Organization Structure
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
     // department: {
-    //   type: Types.ObjectId,
+    //   type:  Schema.Types.ObjectId,
     //   ref: "Department",
     //   required: true,
     // },
 
     // designation: {
-    //   type: Types.ObjectId,
+    //   type:  Schema.Types.ObjectId,
     //   ref: "Designation",
     //   required: true,
     // },

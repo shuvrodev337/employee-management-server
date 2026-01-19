@@ -25,6 +25,8 @@ const createAdminValidationSchema = z.object({
         'internship',
         'contractual',
       ]),
+      //   organization: z.string(),
+
       //   department: z.string(),
       //   designation: z.string(),
     }),
@@ -49,6 +51,7 @@ const updateAdminValidationSchema = z.object({
       employmentType: z
         .enum(['permanent', 'partTime', 'internship', 'contractual'])
         .optional(),
+      //   organization: z.string().optional(),
       //   department: z.string().optional(),
       //   designation: z.string().optional(),
     }),

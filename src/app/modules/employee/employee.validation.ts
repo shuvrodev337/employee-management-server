@@ -54,6 +54,7 @@ const createEmployeeValidationSchema = z.object({
         'internship',
         'contractual',
       ]),
+      //   organization: z.string(),
       //   department: z.string(),
       //   designation: z.string(),
       //   manager: z.string(),
@@ -79,6 +80,7 @@ const updateEmployeeValidationSchema = z.object({
       employmentType: z
         .enum(['permanent', 'partTime', 'internship', 'contractual'])
         .optional(),
+      //   organization: z.string().optional(),
       //   department: z.string().optional(),
       //   designation: z.string().optional(),
       //   manager: z.string().optional(),
