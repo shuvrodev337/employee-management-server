@@ -29,7 +29,12 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['superAdmin', 'admin', 'employee'],
+      enum: ['superAdmin', 'admin', 'employee', 'organizationAdmin'],
+    },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
     },
     status: {
       type: String,

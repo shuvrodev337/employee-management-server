@@ -2,6 +2,10 @@ import { model, Schema } from 'mongoose';
 import { IOrganization, OrganizationModel } from './organization.interface';
 
 const organizationSchema = new Schema<IOrganization, OrganizationModel>({
+  // _id: {
+  //   type: Schema.Types.ObjectId,
+  //   unique: true,
+  // },
   id: {
     type: String,
     required: [true, 'ID is required'],
@@ -18,15 +22,19 @@ const organizationSchema = new Schema<IOrganization, OrganizationModel>({
     required: [true, 'Email is required'],
     unique: true,
   },
-  address: {
+  organizationContactNo: {
+    type: String,
+    required: [true, 'Contact number is required'],
+  },
+  organizationAddress: {
     type: String,
     required: [true, 'Address is required'],
   },
-  contactNo: { type: String, required: [true, 'Contact number is required'] },
   organizationAdmin: {
     type: Schema.Types.ObjectId,
     ref: 'OrganizationAdmin',
-    required: true,
+    // required: true,
+    default: null,
   },
   isActive: {
     type: Boolean,

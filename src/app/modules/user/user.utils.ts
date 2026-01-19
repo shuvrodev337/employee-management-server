@@ -1,3 +1,4 @@
+import { Organization } from '../organization/organization.model';
 import { User } from './user.model';
 
 const findLastEmployeeId = async () => {
@@ -40,6 +41,40 @@ const findLastAdminId = async () => {
 
   return lastAdmin?.id ? lastAdmin.id : undefined;
 };
+const findLastOrganizationAdminId = async () => {
+  const lastOrganizationAdmin = await User.findOne(
+    {
+      role: 'organizationAdmin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastOrganizationAdmin?.id ? lastOrganizationAdmin.id : undefined;
+};
+const findLastOrganizationId = async () => {
+  const lastOrganization = await Organization.findOne(
+    // {
+    //   role: 'organization',
+    // },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastOrganization?.id ? lastOrganization.id : undefined;
+};
 
 export const generateEmployeeId = async () => {
   let currentId = (0).toString();
@@ -65,6 +100,34 @@ export const generateAdminId = async () => {
     currentId = lastAdminId.substring(3);
   }
   const incrementedId = `A-${(Number(currentId) + 1)
+    .toString()
+    .padStart(4, '0')}`;
+
+  return incrementedId;
+};
+export const generateOrganizationAdminId = async () => {
+  let currentId = (0).toString();
+
+  const lastOrganizationAdminId = await findLastOrganizationAdminId();
+
+  if (lastOrganizationAdminId) {
+    currentId = lastOrganizationAdminId.substring(3);
+  }
+  const incrementedId = `OA-${(Number(currentId) + 1)
+    .toString()
+    .padStart(4, '0')}`;
+
+  return incrementedId;
+};
+export const generateOrganizationId = async () => {
+  let currentId = (0).toString();
+
+  const lastOrganizationId = await findLastOrganizationId();
+
+  if (lastOrganizationId) {
+    currentId = lastOrganizationId.substring(3);
+  }
+  const incrementedId = `ORG-${(Number(currentId) + 1)
     .toString()
     .padStart(4, '0')}`;
 

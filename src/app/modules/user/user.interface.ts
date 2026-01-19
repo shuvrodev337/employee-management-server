@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
 /* eslint-disable no-unused-vars */
@@ -6,8 +7,9 @@ export interface IUser {
   email: string;
   password: string;
   needsPasswordChange: boolean;
-  role: 'superAdmin' | 'admin' | 'employee';
+  role: 'superAdmin' | 'admin' | 'employee' | 'organizationAdmin';
   status: 'in-progress' | 'blocked';
+  organization: Types.ObjectId;
   isDeleted: boolean;
   passwordChangedAt?: Date;
   createdAt: Date;

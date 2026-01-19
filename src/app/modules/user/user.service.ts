@@ -8,7 +8,16 @@ import { TNewUser } from './user.interface';
 import { User } from './user.model';
 import AppError from '../../errors/AppError';
 import { StatusCodes } from 'http-status-codes';
-import { generateAdminId, generateEmployeeId } from './user.utils';
+import {
+  generateAdminId,
+  generateEmployeeId,
+  generateOrganizationAdminId,
+  generateOrganizationId,
+} from './user.utils';
+import { TNewOrganizationAdmin } from '../organizationAdmin/organizationAdmin.interface';
+import { TNewOrganization } from '../organization/organization.interface';
+import { Organization } from '../organization/organization.model';
+import { OrganizationAdmin } from '../organizationAdmin/organizationAdmin.model';
 
 const createEmployeeIntoDB = async (
   password: string,
@@ -95,7 +104,97 @@ const createAdminIntoDB = async (password: string, adminData: TNewAdmin) => {
     );
   }
 };
+
+const createOrganizationAdminIntoDB = async (
+  password: string,
+  organizationAdminData: TNewOrganizationAdmin,
+) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    //create Organization
+    const organizationData: TNewOrganization = {};
+    organizationData.id = await generateOrganizationId();
+    organizationData.organizationName = organizationAdminData.organizationName;
+    organizationData.organizationEmail =
+      organizationAdminData.organizationEmail;
+    organizationData.organizationAddress =
+      organizationAdminData.organizationAddress;
+    organizationData.organizationContactNo =
+      organizationAdminData.organizationContactNo;
+
+    const newOrganization = await Organization.create([organizationData], {
+      session,
+    });
+    if (!newOrganization.length) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        'Failed to create organization!',
+      );
+    }
+    // create user
+    const userData: TNewUser = {};
+    userData.password = password || config.default_pass;
+    userData.role = 'organizationAdmin';
+    userData.email = organizationAdminData.email;
+    userData.organization = newOrganization[0]._id;
+
+    userData.id = await generateOrganizationAdminId();
+    const newUser = await User.create([userData], { session });
+    if (!newUser.length) {
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create user!');
+    }
+    // create organizationAdmin
+
+    organizationAdminData.id = newUser[0].id;
+    organizationAdminData.user = newUser[0]._id;
+    organizationAdminData.organization = newOrganization[0]._id;
+    organizationAdminData.dateOfBirth =
+      organizationAdminData.dateOfBirth &&
+      new Date(organizationAdminData.dateOfBirth);
+    organizationAdminData.joiningDate =
+      organizationAdminData.joiningDate &&
+      new Date(organizationAdminData.joiningDate);
+    const newOrganizationAdmin = await OrganizationAdmin.create(
+      [organizationAdminData],
+      { session },
+    );
+    if (!newOrganizationAdmin.length) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        'Failed to create organization admin!',
+      );
+    }
+    //set organizationAdmin's _id as the value of organizationAdmin of newOrganization
+    const updatedOrganization = await Organization.findByIdAndUpdate(
+      newOrganization[0]._id,
+      {
+        organizationAdmin: newOrganizationAdmin[0]._id,
+      },
+      { session },
+    );
+    if (!updatedOrganization) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        'Failed to update organization with organization admin!',
+      );
+    }
+    await session.commitTransaction();
+    await session.endSession();
+    return newOrganizationAdmin;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Failed to create organization and organization admin!',
+    );
+  }
+};
+
 export const UserServices = {
   createEmployeeIntoDB,
   createAdminIntoDB,
+  createOrganizationAdminIntoDB,
 };

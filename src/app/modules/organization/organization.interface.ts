@@ -1,18 +1,19 @@
 import { Model, Types } from 'mongoose';
 
 export interface IOrganization {
+  // _id: Types.ObjectId;
   id: string;
   organizationName: string;
 
   organizationEmail: string; // official company email
-  contactNo: string;
+  organizationContactNo: string;
 
-  address: string;
+  organizationAddress: string;
 
   isActive: boolean;
   isDeleted: boolean;
 
-  organizationAdmin: Types.ObjectId; // organizationAdmin _id
+  organizationAdmin: Types.ObjectId | null; // organizationAdmin _id
   createdAt?: Date;
   updatedAt?: Date;
 }

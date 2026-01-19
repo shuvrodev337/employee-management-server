@@ -91,6 +91,22 @@ const organizationAdminSchema = new Schema<
       ref: 'Organization',
       required: true,
     },
+    organizationName: {
+      type: String,
+      required: [true, 'Organization Name is required'],
+    },
+    organizationEmail: {
+      type: String,
+      required: [true, 'Organization email is required'],
+    },
+    organizationAddress: {
+      type: String,
+      required: [true, 'Organization address is required'],
+    },
+    organizationContactNo: {
+      type: String,
+      required: [true, 'Organization Contact number is required'],
+    },
     // department: {
     //   type:  Schema.Types.ObjectId,
     //   ref: "Department",

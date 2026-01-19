@@ -17,6 +17,13 @@ export interface IOrganizationAdmin {
   ownershipType: 'founder' | 'co-founder' | 'partner';
   isDeleted: boolean;
   organization: Types.ObjectId;
+  //
+  organizationName: string;
+
+  organizationEmail: string;
+  organizationContactNo: string;
+
+  organizationAddress: string;
 }
 export interface OrganizationAdminModel extends Model<IOrganizationAdmin> {
   // eslint-disable-next-line no-unused-vars
