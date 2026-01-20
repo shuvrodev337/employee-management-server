@@ -23,7 +23,21 @@ const createAdmin = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const createOrganizationAdmin = catchAsync(async (req, res) => {
+  const { password, organizationAdmin } = req.body;
+  const result = await UserServices.createOrganizationAdminIntoDB(
+    password,
+    organizationAdmin,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Organization and organization Admin created successfully',
+    sttatusCode: StatusCodes.OK,
+    data: result,
+  });
+});
 export const UserController = {
   createEmployee,
   createAdmin,
+  createOrganizationAdmin,
 };

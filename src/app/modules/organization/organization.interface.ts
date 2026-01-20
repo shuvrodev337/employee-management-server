@@ -1,7 +1,6 @@
 import { Model, Types } from 'mongoose';
 
 export interface IOrganization {
-  // _id: Types.ObjectId;
   id: string;
   organizationName: string;
 
@@ -19,6 +18,6 @@ export interface IOrganization {
 }
 export interface OrganizationModel extends Model<IOrganization> {
   // eslint-disable-next-line no-unused-vars
-  doesOrganizationExist(_id: string): Promise<IOrganization | null>;
+  doesOrganizationExist(id: string): Promise<IOrganization | null>;
 }
 export type TNewOrganization = Partial<IOrganization>;

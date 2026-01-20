@@ -33,6 +33,7 @@ const createEmployeeIntoDB = async (
     userData.email = employeeData.email;
 
     userData.id = await generateEmployeeId();
+    userData.organization = employeeData.organization;
 
     const newUser = await User.create([userData], { session });
     if (!newUser.length) {
@@ -76,6 +77,8 @@ const createAdminIntoDB = async (password: string, adminData: TNewAdmin) => {
     userData.email = adminData.email;
 
     userData.id = await generateAdminId();
+    userData.organization = adminData.organization;
+
     const newUser = await User.create([userData], { session });
     if (!newUser.length) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create user!');
@@ -123,7 +126,6 @@ const createOrganizationAdminIntoDB = async (
       organizationAdminData.organizationAddress;
     organizationData.organizationContactNo =
       organizationAdminData.organizationContactNo;
-
     const newOrganization = await Organization.create([organizationData], {
       session,
     });
@@ -133,6 +135,7 @@ const createOrganizationAdminIntoDB = async (
         'Failed to create organization!',
       );
     }
+
     // create user
     const userData: TNewUser = {};
     userData.password = password || config.default_pass;
@@ -145,6 +148,7 @@ const createOrganizationAdminIntoDB = async (
     if (!newUser.length) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create user!');
     }
+
     // create organizationAdmin
 
     organizationAdminData.id = newUser[0].id;
@@ -166,6 +170,7 @@ const createOrganizationAdminIntoDB = async (
         'Failed to create organization admin!',
       );
     }
+
     //set organizationAdmin's _id as the value of organizationAdmin of newOrganization
     const updatedOrganization = await Organization.findByIdAndUpdate(
       newOrganization[0]._id,
@@ -180,6 +185,7 @@ const createOrganizationAdminIntoDB = async (
         'Failed to update organization with organization admin!',
       );
     }
+
     await session.commitTransaction();
     await session.endSession();
     return newOrganizationAdmin;

@@ -4,11 +4,12 @@ import {
   dateString,
   updateUserNameValidationSchema,
 } from '../employee/employee.validation';
+// Zod validations
 
-const createAdminValidationSchema = z.object({
+const createOrganizationAdminValidationSchema = z.object({
   body: z.object({
     password: z.string().max(20).optional(),
-    admin: z.object({
+    organizationAdmin: z.object({
       name: createUserNameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
       dateOfBirth: dateString,
@@ -19,23 +20,18 @@ const createAdminValidationSchema = z.object({
       presentAddress: z.string(),
       permanentAddress: z.string(),
       joiningDate: dateString,
-      employmentType: z.enum([
-        'permanent',
-        'partTime',
-        'internship',
-        'contractual',
-      ]),
-      organization: z.string(),
-
-      //   department: z.string(),
-      //   designation: z.string(),
+      ownershipType: z.enum(['founder', 'co-founder', 'partner']),
+      organizationName: z.string(),
+      organizationEmail: z.string().email(),
+      organizationContactNo: z.string(),
+      organizationAddress: z.string(),
     }),
   }),
 });
-const updateAdminValidationSchema = z.object({
-  body: z.object({
+const updateOrganizationAdminValidationSchema = z.object({
+  organizationAdmin: z.object({
     password: z.string().max(20).optional(),
-    admin: z.object({
+    employee: z.object({
       name: updateUserNameValidationSchema.optional(),
       gender: z.enum(['male', 'female', 'other']).optional(),
       dateOfBirth: dateString.optional(),
@@ -48,16 +44,15 @@ const updateAdminValidationSchema = z.object({
       presentAddress: z.string().optional(),
       permanentAddress: z.string().optional(),
       joiningDate: dateString.optional(),
-      employmentType: z
-        .enum(['permanent', 'partTime', 'internship', 'contractual'])
-        .optional(),
-      organization: z.string().optional(),
-      //   department: z.string().optional(),
-      //   designation: z.string().optional(),
+      ownershipType: z.enum(['founder', 'co-founder', 'partner']).optional(),
+      organizationName: z.string().optional(),
+      organizationEmail: z.string().email().optional(),
+      organizationContactNo: z.string().optional(),
+      organizationAddress: z.string().optional(),
     }),
   }),
 });
-export const adminValidations = {
-  createAdminValidationSchema,
-  updateAdminValidationSchema,
+export const organizationAdminValidations = {
+  createOrganizationAdminValidationSchema,
+  updateOrganizationAdminValidationSchema,
 };

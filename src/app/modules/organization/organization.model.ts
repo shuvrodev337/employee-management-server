@@ -2,10 +2,6 @@ import { model, Schema } from 'mongoose';
 import { IOrganization, OrganizationModel } from './organization.interface';
 
 const organizationSchema = new Schema<IOrganization, OrganizationModel>({
-  // _id: {
-  //   type: Schema.Types.ObjectId,
-  //   unique: true,
-  // },
   id: {
     type: String,
     required: [true, 'ID is required'],
@@ -15,7 +11,7 @@ const organizationSchema = new Schema<IOrganization, OrganizationModel>({
     type: String,
     trim: true,
     unique: true,
-    required: [true, 'User id is required'],
+    required: [true, 'Organization Name is required'],
   },
   organizationEmail: {
     type: String,
@@ -62,11 +58,10 @@ organizationSchema.pre('aggregate', function (next) {
 });
 
 //checking if organization  exists!
-organizationSchema.statics.doesOrganizationExist = async function (
-  _id: string,
-) {
-  const existingOrganizationAdmin = await Organization.findById(_id);
-  return existingOrganizationAdmin;
+organizationSchema.statics.doesOrganizationExist = async function (id: string) {
+  console.log('doesOrganizationExist called with:', id, typeof id);
+  const existingOrganization = await Organization.findOne({ id });
+  return existingOrganization;
 };
 export const Organization = model<IOrganization, OrganizationModel>(
   'Organization',

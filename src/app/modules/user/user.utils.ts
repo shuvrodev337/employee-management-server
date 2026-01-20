@@ -60,9 +60,7 @@ const findLastOrganizationAdminId = async () => {
 };
 const findLastOrganizationId = async () => {
   const lastOrganization = await Organization.findOne(
-    // {
-    //   role: 'organization',
-    // },
+    {},
     {
       id: 1,
       _id: 0,
