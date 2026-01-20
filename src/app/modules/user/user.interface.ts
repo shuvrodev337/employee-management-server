@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { USER_ROLE } from './user.constant';
+import { Model } from 'mongoose';
 
 /* eslint-disable no-unused-vars */
 export interface IUser {
@@ -18,3 +19,17 @@ export interface IUser {
 export type TNewUser = Partial<IUser>;
 
 export type TUserRole = keyof typeof USER_ROLE;
+export interface UserModel extends Model<IUser> {
+  //instance methods
+  isUserExistsByCustomId(id: string): Promise<IUser>;
+  isPasswordMatched(
+    plainTextPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean>;
+  isUserBlocked(id: string): Promise<boolean>;
+  isUserDeleted(id: string): Promise<boolean>;
+  isPasswordChangedAfterJWTissued(
+    passwordChangedAt: Date,
+    jwtIssuedAt: number,
+  ): boolean;
+}

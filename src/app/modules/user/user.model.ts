@@ -1,7 +1,9 @@
 import { model, Schema } from 'mongoose';
-import { IUser } from './user.interface';
+import { IUser, UserModel } from './user.interface';
 import { UserStatus } from './user.constant';
-const userSchema = new Schema<IUser>(
+import bcrypt from 'bcrypt';
+import config from '../../config';
+const userSchema = new Schema<IUser, UserModel>(
   {
     id: {
       type: String,
@@ -51,4 +53,54 @@ const userSchema = new Schema<IUser>(
   },
 );
 
-export const User = model<IUser>('User', userSchema);
+// mongodb middlewares
+
+// hash password
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+userSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+//static methods
+userSchema.statics.isUserExistsByCustomId = async function (id: string) {
+  return await User.findOne({ id }).select('+password');
+};
+
+userSchema.statics.isUserBlocked = async function (id: string) {
+  const user = await User.findOne({ id }).select('+password');
+  if (user?.status === 'blocked') {
+    return true;
+  }
+  return false;
+};
+userSchema.statics.isUserDeleted = async function (id: string) {
+  const user = await User.findOne({ id }).select('+password');
+
+  return user?.isDeleted;
+};
+
+userSchema.statics.isPasswordMatched = async function (
+  plainTextPassword,
+  hashedPassword,
+) {
+  return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+userSchema.statics.isPasswordChangedAfterJWTissued = function (
+  passwordChangedAt,
+  jwtIssuedAt,
+) {
+  // Purpose of this method is to invalidate a token after password change.
+  const passwordChangedTime = new Date(passwordChangedAt).getTime() / 1000;
+
+  return passwordChangedTime > jwtIssuedAt;
+};
+
+export const User = model<IUser, UserModel>('User', userSchema);

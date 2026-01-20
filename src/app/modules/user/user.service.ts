@@ -23,9 +23,19 @@ const createEmployeeIntoDB = async (
   password: string,
   employeeData: TNewEmployee,
 ) => {
+  //check if organizatonexists
+  const existingOrganization =
+    employeeData.organization &&
+    (await Organization.doesOrganizationExist(employeeData.organization));
+
+  if (!existingOrganization) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Organization does not exist!');
+  }
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+
     // create user
     const userData: TNewUser = {};
     userData.password = password || config.default_pass;
@@ -67,9 +77,19 @@ const createEmployeeIntoDB = async (
   }
 };
 const createAdminIntoDB = async (password: string, adminData: TNewAdmin) => {
+  //check if organizatonexists
+  const existingOrganization =
+    adminData.organization &&
+    (await Organization.doesOrganizationExist(adminData.organization));
+
+  if (!existingOrganization) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Organization does not exist!');
+  }
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+
     // create user
     const userData: TNewUser = {};
     userData.password = password || config.default_pass;

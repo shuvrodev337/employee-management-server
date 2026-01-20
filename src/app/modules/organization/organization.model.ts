@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { IOrganization, OrganizationModel } from './organization.interface';
+import { Types } from 'mongoose';
 
 const organizationSchema = new Schema<IOrganization, OrganizationModel>({
   id: {
@@ -58,9 +59,10 @@ organizationSchema.pre('aggregate', function (next) {
 });
 
 //checking if organization  exists!
-organizationSchema.statics.doesOrganizationExist = async function (id: string) {
-  console.log('doesOrganizationExist called with:', id, typeof id);
-  const existingOrganization = await Organization.findOne({ id });
+organizationSchema.statics.doesOrganizationExist = async function (
+  _id: Types.ObjectId,
+) {
+  const existingOrganization = await Organization.findById(_id);
   return existingOrganization;
 };
 export const Organization = model<IOrganization, OrganizationModel>(

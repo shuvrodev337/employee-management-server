@@ -5,12 +5,18 @@ import { Employee } from './employee.model';
 import mongoose from 'mongoose';
 import { User } from '../user/user.model';
 
-const getAllEmployeesFromDB = async () => {
-  const employees = await Employee.find();
+const getAllEmployeesFromDB = async (organization_Id: string) => {
+  const employees = await Employee.find({ organization: organization_Id });
   return employees;
 };
-const getSingleEmployeeFromDB = async (_id: string) => {
-  const result = await Employee.findById(_id);
+const getSingleEmployeeFromDB = async (
+  _id: string,
+  organization_Id: string,
+) => {
+  const result = await Employee.findOne({
+    _id,
+    organization: organization_Id,
+  });
   if (!result) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find employee!');
   }
@@ -20,7 +26,8 @@ const updateEmployeeIntoDB = async (
   _id: string,
   updateData: Partial<IEmployee>,
 ) => {
-  if (!(await Employee.doesEmployeeExist(_id))) {
+  const existingEmployee = await Employee.doesEmployeeExist(_id);
+  if (!existingEmployee) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find employee!');
   }
   const { name, ...remainingFacultyData } = updateData;
@@ -34,9 +41,13 @@ const updateEmployeeIntoDB = async (
       modifiedUpdatedData[`name.${key}`] = value;
     }
   }
-
-  const result = await Employee.findByIdAndUpdate(
-    { _id, isDeleted: { $ne: true } },
+  // alternative approach , get organization _id from params instead of existingEmployee.organization.
+  const result = await Employee.findOneAndUpdate(
+    {
+      _id,
+      organization: existingEmployee.organization,
+      isDeleted: { $ne: true },
+    },
     modifiedUpdatedData,
     { new: true, runValidators: true },
   );
@@ -45,7 +56,8 @@ const updateEmployeeIntoDB = async (
 };
 
 const deleteEmployeeFromDB = async (_id: string) => {
-  if (!(await Employee.doesEmployeeExist(_id))) {
+  const existingEmployee = await Employee.doesEmployeeExist(_id);
+  if (!existingEmployee) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find employee!');
   }
 
@@ -53,8 +65,8 @@ const deleteEmployeeFromDB = async (_id: string) => {
   try {
     session.startTransaction();
 
-    const deletedEmployee = await Employee.findByIdAndUpdate(
-      _id,
+    const deletedEmployee = await Employee.findOneAndUpdate(
+      { _id, organization: existingEmployee.organization },
       { isDeleted: true },
       { new: true, session },
     );
@@ -62,8 +74,8 @@ const deleteEmployeeFromDB = async (_id: string) => {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to delete employee!');
     }
     const user_id = deletedEmployee.user;
-    const updatedUser = await User.findByIdAndUpdate(
-      user_id,
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user_id, organization: existingEmployee.organization },
       { isDeleted: true },
       { new: true, session },
     );

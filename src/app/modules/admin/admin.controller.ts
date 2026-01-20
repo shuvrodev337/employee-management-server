@@ -4,7 +4,8 @@ import sendResponse from '../../utils/sendResponse';
 import { AdminServices } from './admin.service';
 
 const getAllAdmins = catchAsync(async (req, res) => {
-  const result = await AdminServices.getAllAdminsFromDB();
+  const { organization } = req.params;
+  const result = await AdminServices.getAllAdminsFromDB(organization);
   sendResponse(res, {
     success: true,
     message: 'Admins retrieved successfully',
@@ -13,8 +14,8 @@ const getAllAdmins = catchAsync(async (req, res) => {
   });
 });
 const getSingleAdmin = catchAsync(async (req, res) => {
-  const { _id } = req.params;
-  const result = await AdminServices.getSingleAdminFromDB(_id);
+  const { _id, organization } = req.params;
+  const result = await AdminServices.getSingleAdminFromDB(_id, organization);
   sendResponse(res, {
     success: true,
     message: 'Admin retrieved successfully',

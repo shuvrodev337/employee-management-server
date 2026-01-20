@@ -4,7 +4,8 @@ import sendResponse from '../../utils/sendResponse';
 import { EmployeeServices } from './employee.service';
 
 const getAllEmployees = catchAsync(async (req, res) => {
-  const result = await EmployeeServices.getAllEmployeesFromDB();
+  const { organization } = req.params;
+  const result = await EmployeeServices.getAllEmployeesFromDB(organization);
   sendResponse(res, {
     success: true,
     message: 'Employee retrieved successfully',
@@ -13,8 +14,11 @@ const getAllEmployees = catchAsync(async (req, res) => {
   });
 });
 const getSingleEmployee = catchAsync(async (req, res) => {
-  const { _id } = req.params;
-  const result = await EmployeeServices.getSingleEmployeeFromDB(_id);
+  const { _id, organization } = req.params;
+  const result = await EmployeeServices.getSingleEmployeeFromDB(
+    _id,
+    organization,
+  );
   sendResponse(res, {
     success: true,
     message: 'Employee retrieved successfully',

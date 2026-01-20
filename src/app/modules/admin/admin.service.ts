@@ -5,19 +5,23 @@ import mongoose from 'mongoose';
 import { IAdmin } from './admin.interface';
 import { User } from '../user/user.model';
 
-const getAllAdminsFromDB = async () => {
-  const admins = await Admin.find();
+const getAllAdminsFromDB = async (organization_Id: string) => {
+  const admins = await Admin.find({ organization: organization_Id });
   return admins;
 };
-const getSingleAdminFromDB = async (_id: string) => {
-  const result = await Admin.findById(_id);
+const getSingleAdminFromDB = async (_id: string, organization_Id: string) => {
+  const result = await Admin.findOne({
+    _id,
+    organization: organization_Id,
+  });
   if (!result) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find admin!');
   }
   return result;
 };
 const updateAdminIntoDB = async (_id: string, updateData: Partial<IAdmin>) => {
-  if (!(await Admin.doesAdminExist(_id))) {
+  const existingAdmin = await Admin.doesAdminExist(_id);
+  if (!existingAdmin) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find admin!');
   }
   const { name, ...remainingFacultyData } = updateData;
@@ -31,9 +35,13 @@ const updateAdminIntoDB = async (_id: string, updateData: Partial<IAdmin>) => {
       modifiedUpdatedData[`name.${key}`] = value;
     }
   }
-
-  const result = await Admin.findByIdAndUpdate(
-    { _id, isDeleted: { $ne: true } },
+  // alternative approach , get organization _id from params instead of existingEmployee.organization.
+  const result = await Admin.findOneAndUpdate(
+    {
+      _id,
+      organization: existingAdmin.organization,
+      isDeleted: { $ne: true },
+    },
     modifiedUpdatedData,
     { new: true, runValidators: true },
   );
@@ -42,7 +50,9 @@ const updateAdminIntoDB = async (_id: string, updateData: Partial<IAdmin>) => {
 };
 
 const deleteAdminFromDB = async (_id: string) => {
-  if (!(await Admin.doesAdminExist(_id))) {
+  const existingAdmin = await Admin.doesAdminExist(_id);
+
+  if (!existingAdmin) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find admin!');
   }
 
@@ -51,7 +61,7 @@ const deleteAdminFromDB = async (_id: string) => {
     session.startTransaction();
 
     const deletedAdmin = await Admin.findByIdAndUpdate(
-      _id,
+      { _id, organization: existingAdmin.organization },
       { isDeleted: true },
       { new: true, session },
     );
@@ -60,7 +70,7 @@ const deleteAdminFromDB = async (_id: string) => {
     }
     const user_id = deletedAdmin.user;
     const updatedUser = await User.findByIdAndUpdate(
-      user_id,
+      { _id: user_id, organization: existingAdmin.organization },
       { isDeleted: true },
       { new: true, session },
     );
