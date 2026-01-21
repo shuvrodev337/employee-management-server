@@ -162,6 +162,7 @@ const createOrganizationAdminIntoDB = async (
     userData.role = 'organizationAdmin';
     userData.email = organizationAdminData.email;
     userData.organization = newOrganization[0]._id;
+    userData.needsPasswordChange = false;
 
     userData.id = await generateOrganizationAdminId();
     const newUser = await User.create([userData], { session });
