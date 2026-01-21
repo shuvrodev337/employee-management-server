@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { AdminServices } from './admin.service';
 
 const getAllAdmins = catchAsync(async (req, res) => {
-  const { organization } = req.params;
+  const { organization } = req.user;
   const result = await AdminServices.getAllAdminsFromDB(organization);
   sendResponse(res, {
     success: true,
@@ -14,7 +14,8 @@ const getAllAdmins = catchAsync(async (req, res) => {
   });
 });
 const getSingleAdmin = catchAsync(async (req, res) => {
-  const { _id, organization } = req.params;
+  const { _id } = req.params;
+  const { organization } = req.user;
   const result = await AdminServices.getSingleAdminFromDB(_id, organization);
   sendResponse(res, {
     success: true,
@@ -25,8 +26,13 @@ const getSingleAdmin = catchAsync(async (req, res) => {
 });
 const updateAdmin = catchAsync(async (req, res) => {
   const { _id } = req.params;
+  const { organization } = req.user;
   const { admin: updateData } = req.body;
-  const result = await AdminServices.updateAdminIntoDB(_id, updateData);
+  const result = await AdminServices.updateAdminIntoDB(
+    _id,
+    organization,
+    updateData,
+  );
   sendResponse(res, {
     success: true,
     message: 'Admin updated successfully',
@@ -37,7 +43,9 @@ const updateAdmin = catchAsync(async (req, res) => {
 
 const deleteAdmin = catchAsync(async (req, res) => {
   const { _id } = req.params;
-  const result = await AdminServices.deleteAdminFromDB(_id);
+  const { organization } = req.user;
+
+  const result = await AdminServices.deleteAdminFromDB(_id, organization);
   sendResponse(res, {
     success: true,
     message: 'Admin deleted successfully',

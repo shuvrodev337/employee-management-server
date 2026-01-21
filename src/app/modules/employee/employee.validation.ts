@@ -63,7 +63,7 @@ const createEmployeeValidationSchema = z.object({
 });
 const updateEmployeeValidationSchema = z.object({
   body: z.object({
-    password: z.string().max(20).optional(),
+    // password: z.string().max(20).optional(),
     employee: z.object({
       name: updateUserNameValidationSchema.optional(),
       gender: z.enum(['male', 'female', 'other']).optional(),
@@ -80,7 +80,7 @@ const updateEmployeeValidationSchema = z.object({
       employmentType: z
         .enum(['permanent', 'partTime', 'internship', 'contractual'])
         .optional(),
-      organization: z.string().optional(),
+      // organization: z.string().optional(),
       //   department: z.string().optional(),
       //   designation: z.string().optional(),
       //   manager: z.string().optional(),

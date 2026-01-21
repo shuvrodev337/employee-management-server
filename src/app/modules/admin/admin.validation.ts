@@ -7,7 +7,7 @@ import {
 
 const createAdminValidationSchema = z.object({
   body: z.object({
-    password: z.string().max(20).optional(),
+    // password: z.string().max(20).optional(),
     admin: z.object({
       name: createUserNameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
@@ -25,7 +25,7 @@ const createAdminValidationSchema = z.object({
         'internship',
         'contractual',
       ]),
-      organization: z.string(),
+      // organization: z.string(),
 
       //   department: z.string(),
       //   designation: z.string(),

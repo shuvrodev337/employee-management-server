@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { EmployeeServices } from './employee.service';
 
 const getAllEmployees = catchAsync(async (req, res) => {
-  const { organization } = req.params;
+  const { organization } = req.user;
   const result = await EmployeeServices.getAllEmployeesFromDB(organization);
   sendResponse(res, {
     success: true,
@@ -14,7 +14,9 @@ const getAllEmployees = catchAsync(async (req, res) => {
   });
 });
 const getSingleEmployee = catchAsync(async (req, res) => {
-  const { _id, organization } = req.params;
+  const { _id } = req.params;
+  const { organization } = req.user;
+
   const result = await EmployeeServices.getSingleEmployeeFromDB(
     _id,
     organization,
@@ -28,8 +30,13 @@ const getSingleEmployee = catchAsync(async (req, res) => {
 });
 const updateEmployee = catchAsync(async (req, res) => {
   const { _id } = req.params;
+  const { organization } = req.user;
   const { employee: updateData } = req.body;
-  const result = await EmployeeServices.updateEmployeeIntoDB(_id, updateData);
+  const result = await EmployeeServices.updateEmployeeIntoDB(
+    _id,
+    organization,
+    updateData,
+  );
   sendResponse(res, {
     success: true,
     message: 'Employee updated successfully',
@@ -40,7 +47,9 @@ const updateEmployee = catchAsync(async (req, res) => {
 
 const deleteEmployee = catchAsync(async (req, res) => {
   const { _id } = req.params;
-  const result = await EmployeeServices.deleteEmployeeFromDB(_id);
+  const { organization } = req.user;
+
+  const result = await EmployeeServices.deleteEmployeeFromDB(_id, organization);
   sendResponse(res, {
     success: true,
     message: 'Employee deleted successfully',
