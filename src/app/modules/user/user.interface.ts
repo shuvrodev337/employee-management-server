@@ -28,6 +28,10 @@ export interface UserModel extends Model<IUser> {
   ): Promise<boolean>;
   isUserBlocked(id: string): Promise<boolean>;
   isUserDeleted(id: string): Promise<boolean>;
+  isUserAccessDenied(
+    id: string,
+    accessRequestedOrganization_id: string,
+  ): Promise<boolean>;
   isPasswordChangedAfterJWTissued(
     passwordChangedAt: Date,
     jwtIssuedAt: number,

@@ -60,7 +60,7 @@ organizationSchema.pre('aggregate', function (next) {
 
 //checking if organization  exists!
 organizationSchema.statics.doesOrganizationExist = async function (
-  _id: Types.ObjectId,
+  _id: string | Types.ObjectId,
 ) {
   const existingOrganization = await Organization.findById(_id);
   return existingOrganization;

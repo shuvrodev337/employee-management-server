@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { EmployeeModel, IEmployee } from './employee.interface';
 import { TUserName } from '../admin/admin.interface';
 
@@ -137,7 +137,9 @@ employeeSchema.pre('aggregate', function (next) {
 });
 
 //checking if user is already exist!
-employeeSchema.statics.doesEmployeeExist = async function (_id: string) {
+employeeSchema.statics.doesEmployeeExist = async function (
+  _id: string | Types.ObjectId,
+) {
   const existingEmployee = await Employee.findById(_id);
   return existingEmployee;
 };

@@ -86,6 +86,18 @@ userSchema.statics.isUserDeleted = async function (id: string) {
 
   return user?.isDeleted;
 };
+userSchema.statics.isUserAccessDenied = async function (
+  id: string,
+  accessRequestedOrganization_id: string,
+) {
+  const user = await User.findOne({ id }).select('+password');
+  //check- User requested organization matches the user's organization
+  const accessDenied = user?.organization.equals(
+    accessRequestedOrganization_id,
+  );
+  console.log({ accessDenied });
+  return accessDenied;
+};
 
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,

@@ -38,7 +38,8 @@ const auth = (...requiredRoles: TUserRole[]) => {
     req.user = decoded;
 
     const { userId, iat } = decoded;
-    // console.log({ decoded });
+    // const { _id: accessRequestedOrganization_id } = req.params;
+    // console.log({ accessRequestedOrganization_id });
     // validations
     const user = await User.isUserExistsByCustomId(userId);
     //  invalidate a token after password change.
@@ -64,6 +65,12 @@ const auth = (...requiredRoles: TUserRole[]) => {
     if (await User.isUserDeleted(userId)) {
       throw new AppError(StatusCodes.FORBIDDEN, 'User is deleted');
     }
+    // if (
+    //   accessRequestedOrganization_id &&
+    //   (await User.isUserAccessDenied(userId, accessRequestedOrganization_id))
+    // ) {
+    //   throw new AppError(StatusCodes.FORBIDDEN, 'User access denied');
+    // }
 
     // Authorization
     const roleInToken = decoded?.role;

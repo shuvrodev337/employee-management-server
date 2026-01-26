@@ -18,6 +18,9 @@ export interface IOrganization {
 }
 export interface OrganizationModel extends Model<IOrganization> {
   // eslint-disable-next-line no-unused-vars
-  doesOrganizationExist(_id: Types.ObjectId): Promise<IOrganization | null>;
+  doesOrganizationExist(
+    // eslint-disable-next-line no-unused-vars
+    _id: string | Types.ObjectId,
+  ): Promise<IOrganization | null>;
 }
 export type TNewOrganization = Partial<IOrganization>;

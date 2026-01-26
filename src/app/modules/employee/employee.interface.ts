@@ -26,7 +26,7 @@ export interface IEmployee {
 }
 export interface EmployeeModel extends Model<IEmployee> {
   // eslint-disable-next-line no-unused-vars
-  doesEmployeeExist(_id: string): Promise<IEmployee | null>;
+  doesEmployeeExist(_id: string | Types.ObjectId): Promise<IEmployee | null>;
 }
 
 export type TNewEmployee = Partial<IEmployee>;
