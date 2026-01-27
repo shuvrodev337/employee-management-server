@@ -45,8 +45,42 @@ const getSingleDepartment = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateDepartment = catchAsync(async (req, res) => {
+  const { _id: department_id } = req.params;
+  const { organization } = req.user;
+  const departmentInfo = req.body;
+
+  const result = await DepartmentServices.updateDepartmentIntoDB(
+    department_id,
+    organization,
+    departmentInfo,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Department updated successfully',
+    sttatusCode: StatusCodes.OK,
+    data: result,
+  });
+});
+const deleteDepartment = catchAsync(async (req, res) => {
+  const { _id: department_id } = req.params;
+  const { organization } = req.user;
+
+  const result = await DepartmentServices.deleteteDepartmentFromDB(
+    department_id,
+    organization,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Department deleted successfully',
+    sttatusCode: StatusCodes.OK,
+    data: result,
+  });
+});
 export const DepartmentController = {
   createDepartment,
   getSingleDepartment,
   getAllDepartments,
+  updateDepartment,
+  deleteDepartment,
 };

@@ -54,6 +54,11 @@ const updateDepartmentIntoDB = async (
 
   departmentInfo: Partial<IDepartment>,
 ) => {
+  const department = await Department.doesDepartmentExist(_id, organization_Id);
+  if (!department) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find department!');
+  }
+
   const result = await Department.findOneAndUpdate(
     { _id, organization: organization_Id },
     departmentInfo,
@@ -63,10 +68,27 @@ const updateDepartmentIntoDB = async (
   );
   return result;
 };
+const deleteteDepartmentFromDB = async (
+  _id: string,
+  organization_Id: string,
+) => {
+  const department = await Department.doesDepartmentExist(_id, organization_Id);
+  if (!department) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find department!');
+  }
+
+  const result = await Department.findOneAndUpdate(
+    { _id, organization: organization_Id },
+    { isDeleted: true },
+    { new: true },
+  );
+  return result;
+};
 
 export const DepartmentServices = {
   createDepartmentIntoDb,
   getAllDepartmentsFromDb,
   getSingleDepartmentFromDB,
   updateDepartmentIntoDB,
+  deleteteDepartmentFromDB,
 };

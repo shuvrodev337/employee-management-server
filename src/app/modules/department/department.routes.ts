@@ -19,15 +19,15 @@ router.get(
   auth(USER_ROLE.organizationAdmin, USER_ROLE.admin),
   DepartmentController.getSingleDepartment,
 );
-// router.patch(
-//   '/:_id',
-//   auth(USER_ROLE.organizationAdmin),
-//   DepartmentController.updateEmployee,
-// );
-// router.delete(
-//   '/:_id',
-//   auth(USER_ROLE.organizationAdmin),
-//   DepartmentController.deleteEmployee,
-// );
+router.patch(
+  '/:_id',
+  auth(USER_ROLE.organizationAdmin),
+  DepartmentController.updateDepartment,
+);
+router.delete(
+  '/:_id',
+  auth(USER_ROLE.organizationAdmin),
+  DepartmentController.deleteDepartment,
+);
 
 export const DepartmentRoutes = router;
