@@ -33,12 +33,12 @@ export interface IAdmin {
   employmentType: 'permanent' | 'partTime' | 'internship' | 'contractual';
   isDeleted: boolean;
   organization: Types.ObjectId;
-  //   department: Types.ObjectId;
-  //   designation: Types.ObjectId;
+  department: Types.ObjectId;
+  designation: Types.ObjectId;
 }
 export interface AdminModel extends Model<IAdmin> {
   // eslint-disable-next-line no-unused-vars
-  doesAdminExist(_id: string): Promise<IAdmin | null>;
+  doesAdminExist(_id: string | Types.ObjectId): Promise<IAdmin | null>;
 }
 
 export type TNewAdmin = Partial<IAdmin>;

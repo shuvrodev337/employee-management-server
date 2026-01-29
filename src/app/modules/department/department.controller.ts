@@ -62,6 +62,23 @@ const updateDepartment = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const assignDepartmentHead = catchAsync(async (req, res) => {
+  const { _id: department_id } = req.params;
+  const { organization } = req.user;
+  const departmentInfo = req.body;
+
+  const result = await DepartmentServices.assignDepartmentHeadIntoDB(
+    department_id,
+    organization,
+    departmentInfo,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Department head assigned successfully',
+    sttatusCode: StatusCodes.OK,
+    data: result,
+  });
+});
 const deleteDepartment = catchAsync(async (req, res) => {
   const { _id: department_id } = req.params;
   const { organization } = req.user;
@@ -83,4 +100,5 @@ export const DepartmentController = {
   getAllDepartments,
   updateDepartment,
   deleteDepartment,
+  assignDepartmentHead,
 };

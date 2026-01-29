@@ -84,23 +84,17 @@ const employeeSchema = new Schema<IEmployee, EmployeeModel>(
       ref: 'Organization',
       required: true,
     },
-    // department: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Department",
-    //   required: true,
-    // },
+    department: {
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      required: true,
+    },
 
-    // designation: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Designation",
-    //   required: true,
-    // },
-
-    // manager: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Employee",
-    //   default: null,
-    // },
+    designation: {
+      type: Schema.Types.ObjectId,
+      ref: 'Designation',
+      required: true,
+    },
   },
   {
     timestamps: true,

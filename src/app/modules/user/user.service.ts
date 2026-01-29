@@ -18,18 +18,44 @@ import { TNewOrganizationAdmin } from '../organizationAdmin/organizationAdmin.in
 import { TNewOrganization } from '../organization/organization.interface';
 import { Organization } from '../organization/organization.model';
 import { OrganizationAdmin } from '../organizationAdmin/organizationAdmin.model';
+import { Department } from '../department/department.model';
+import { Designation } from '../designation/designation.model';
 
 const createEmployeeIntoDB = async (
   password: string,
   employeeData: TNewEmployee,
 ) => {
-  //check if organizatonexists
+  //check if organizaton exists
   const existingOrganization =
     employeeData.organization &&
     (await Organization.doesOrganizationExist(employeeData.organization));
 
   if (!existingOrganization) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Organization does not exist!');
+  }
+  //check if department exists
+  const existingDepartment =
+    employeeData.department &&
+    employeeData.organization &&
+    (await Department.doesDepartmentExist(
+      employeeData.department,
+      employeeData.organization,
+    ));
+
+  if (!existingDepartment) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Department does not exist!');
+  }
+  //check if designation exists
+  const existingDesignation =
+    employeeData.designation &&
+    employeeData.organization &&
+    (await Designation.doesDesignationExist(
+      employeeData.designation,
+      employeeData.organization,
+    ));
+
+  if (!existingDesignation) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Designation does not exist!');
   }
 
   const session = await mongoose.startSession();
@@ -77,13 +103,37 @@ const createEmployeeIntoDB = async (
   }
 };
 const createAdminIntoDB = async (password: string, adminData: TNewAdmin) => {
-  //check if organizatonexists
+  //check if organizaton exists
   const existingOrganization =
     adminData.organization &&
     (await Organization.doesOrganizationExist(adminData.organization));
 
   if (!existingOrganization) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Organization does not exist!');
+  }
+  //check if department exists
+  const existingDepartment =
+    adminData.department &&
+    adminData.organization &&
+    (await Department.doesDepartmentExist(
+      adminData.department,
+      adminData.organization,
+    ));
+
+  if (!existingDepartment) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Department does not exist!');
+  }
+  //check if designation exists
+  const existingDesignation =
+    adminData.designation &&
+    adminData.organization &&
+    (await Designation.doesDesignationExist(
+      adminData.designation,
+      adminData.organization,
+    ));
+
+  if (!existingDesignation) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Designation does not exist!');
   }
 
   const session = await mongoose.startSession();

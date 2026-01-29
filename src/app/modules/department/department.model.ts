@@ -11,7 +11,6 @@ const departmentSchema = new Schema<IDepartment, DepartmentModel>(
     },
     deparmentHead: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: 'Employee',
     },
     organization: {

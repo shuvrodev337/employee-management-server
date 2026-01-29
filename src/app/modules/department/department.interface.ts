@@ -2,7 +2,7 @@ import { Model, Types } from 'mongoose';
 
 export interface IDepartment {
   name: string;
-  deparmentHead: Types.ObjectId;
+  deparmentHead?: Types.ObjectId;
   organization: Types.ObjectId | string;
 
   isDeleted: boolean;

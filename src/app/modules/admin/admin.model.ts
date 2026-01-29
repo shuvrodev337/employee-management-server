@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { AdminModel, IAdmin, TUserName } from './admin.interface';
+import { Types } from 'mongoose';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -84,17 +85,17 @@ const adminSchema = new Schema<IAdmin, AdminModel>(
       ref: 'Organization',
       required: true,
     },
-    // department: {
-    //   type:  Schema.Types.ObjectId,
-    //   ref: "Department",
-    //   required: true,
-    // },
+    department: {
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      required: true,
+    },
 
-    // designation: {
-    //   type:  Schema.Types.ObjectId,
-    //   ref: "Designation",
-    //   required: true,
-    // },
+    designation: {
+      type: Schema.Types.ObjectId,
+      ref: 'Designation',
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -124,7 +125,9 @@ adminSchema.pre('aggregate', function (next) {
 });
 
 //checking if admin already exists!
-adminSchema.statics.doesAdminExist = async function (_id: string) {
+adminSchema.statics.doesAdminExist = async function (
+  _id: string | Types.ObjectId,
+) {
   const existingAdmin = await Admin.findById(_id);
   return existingAdmin;
 };

@@ -28,6 +28,12 @@ router.patch(
   validateRequest(departmentValidation.updateDepartmentValidationSchema),
   DepartmentController.updateDepartment,
 );
+router.patch(
+  '/assign-department-head/:_id',
+  auth(USER_ROLE.organizationAdmin),
+  validateRequest(departmentValidation.assignDepartmentHeadValidationSchema),
+  DepartmentController.assignDepartmentHead,
+);
 router.delete(
   '/:_id',
   auth(USER_ROLE.organizationAdmin),

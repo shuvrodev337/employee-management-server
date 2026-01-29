@@ -20,8 +20,8 @@ export interface IEmployee {
 
   isDeleted?: boolean;
   organization: Types.ObjectId;
-  //   department: Types.ObjectId;
-  //   designation: Types.ObjectId;
+  department: Types.ObjectId;
+  designation: Types.ObjectId;
   //   manager?: Types.ObjectId;
 }
 export interface EmployeeModel extends Model<IEmployee> {
