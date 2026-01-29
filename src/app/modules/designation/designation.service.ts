@@ -38,7 +38,6 @@ const getAllDesignatiosFromDb = async (
     organization: organization_Id,
     department: departmen_Id,
   });
-
   return designations;
 };
 const getSingleDesignationFromDB = async (

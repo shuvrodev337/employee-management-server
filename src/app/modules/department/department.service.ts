@@ -59,6 +59,23 @@ const updateDepartmentIntoDB = async (
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find department!');
   }
 
+  // check update info is valid , // todo: 1. check departmentHead's designation is departmentHead
+  if (
+    departmentInfo.organization &&
+    !(await Organization.doesOrganizationExist(departmentInfo.organization))
+  ) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find organization!');
+  }
+  if (
+    departmentInfo.deparmentHead &&
+    !(await Employee.doesEmployeeExist(departmentInfo.deparmentHead))
+  ) {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      'Failed to find department head!',
+    );
+  }
+  //
   const result = await Department.findOneAndUpdate(
     { _id, organization: organization_Id },
     departmentInfo,
