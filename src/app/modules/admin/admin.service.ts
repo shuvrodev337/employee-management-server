@@ -4,6 +4,7 @@ import { Admin } from './admin.model';
 import mongoose from 'mongoose';
 import { IAdmin } from './admin.interface';
 import { User } from '../user/user.model';
+import { Organization } from '../organization/organization.model';
 
 const getAllAdminsFromDB = async (organization_Id: string) => {
   const admins = await Admin.find({ organization: organization_Id });
@@ -73,7 +74,9 @@ const updateAdminIntoDB = async (
   if (!existingAdmin.organization.equals(organization_Id)) {
     throw new AppError(StatusCodes.FORBIDDEN, 'Access denied!');
   }
-
+  if (!(await Organization.doesOrganizationExist(organization_Id))) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find organization!');
+  }
   const { name, email, ...remainingAdminData } = updateData;
 
   const modifiedUpdatedData: Record<string, unknown> = {

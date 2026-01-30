@@ -10,7 +10,6 @@ const createDepartmentIntoDb = async (
   department: IDepartment,
   organization: string,
 ) => {
-  // todo: 1. check departmentHead's designation is departmentHead
   if (!(await Organization.doesOrganizationExist(organization))) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find organization!');
   }

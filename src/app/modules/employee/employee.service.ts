@@ -4,6 +4,7 @@ import { IEmployee } from './employee.interface';
 import { Employee } from './employee.model';
 import mongoose from 'mongoose';
 import { User } from '../user/user.model';
+import { Organization } from '../organization/organization.model';
 
 const getAllEmployeesFromDB = async (organization_Id: string) => {
   const employees = await Employee.find({ organization: organization_Id });
@@ -79,7 +80,9 @@ const updateEmployeeIntoDB = async (
   if (!existingEmployee.organization.equals(organization_Id)) {
     throw new AppError(StatusCodes.FORBIDDEN, 'Access denied!');
   }
-
+  if (!(await Organization.doesOrganizationExist(organization_Id))) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Failed to find organization!');
+  }
   const { name, email, ...remainingEmployeeData } = updateData;
 
   const modifiedUpdatedData: Record<string, unknown> = {

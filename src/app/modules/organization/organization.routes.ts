@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get(
   '/',
-  // auth(USER_ROLE.superAdmin),
+  auth(USER_ROLE.superAdmin),
   OrganizationController.getAllOrganizations,
 );
 router.get(

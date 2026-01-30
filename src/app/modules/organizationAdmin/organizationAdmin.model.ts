@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import {
   IOrganizationAdmin,
   OrganizationAdminModel,
@@ -85,7 +85,6 @@ const organizationAdminSchema = new Schema<
       default: false,
     },
 
-    // // 🏬 Organization Structure
     organization: {
       type: Schema.Types.ObjectId,
       ref: 'Organization',
@@ -107,17 +106,6 @@ const organizationAdminSchema = new Schema<
       type: String,
       required: [true, 'Organization Contact number is required'],
     },
-    // department: {
-    //   type:  Schema.Types.ObjectId,
-    //   ref: "Department",
-    //   required: true,
-    // },
-
-    // designation: {
-    //   type:  Schema.Types.ObjectId,
-    //   ref: "Designation",
-    //   required: true,
-    // },
   },
   {
     timestamps: true,
