@@ -8,10 +8,9 @@ import { Organization } from '../organization/organization.model';
 
 const getAllOrganizationAdminsFromDB = async () => {
   const organizationAdmins = await OrganizationAdmin.find();
-
   return organizationAdmins;
 };
-const getSingleOrganizationFromDB = async (_id: string) => {
+const getSingleOrganizationAdminFromDB = async (_id: string) => {
   const organizationAdmin = await OrganizationAdmin.findById(_id);
   if (!organizationAdmin) {
     throw new AppError(
@@ -19,7 +18,9 @@ const getSingleOrganizationFromDB = async (_id: string) => {
       'Failed to find organizationAdmin!',
     );
   }
-
+  //  if (!organizationAdmin.organization.equals(organization_Id)) {
+  //     throw new AppError(StatusCodes.FORBIDDEN, 'Access denied!');
+  //   }
   return organizationAdmin;
 };
 
@@ -174,7 +175,7 @@ const deleteOrganizationAdminFromDB = async (
 };
 export const OrganizationAdminServices = {
   getAllOrganizationAdminsFromDB,
-  getSingleOrganizationFromDB,
+  getSingleOrganizationAdminFromDB,
   updateOrganizationAdminIntoDB,
   deleteOrganizationAdminFromDB,
 };

@@ -6,6 +6,7 @@ import { AuthRoutes } from '../modules/auth/auth.routes';
 import { DepartmentRoutes } from '../modules/department/department.routes';
 import { DesignationRoutes } from '../modules/designation/designation.routes';
 import { OrganizationRoutes } from '../modules/organization/organization.routes';
+import { OrganizationAdminRoutes } from '../modules/organizationAdmin/organizationAdmin.routes';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -32,6 +33,10 @@ const moduleRoutes = [
   {
     path: '/organizations',
     route: OrganizationRoutes,
+  },
+  {
+    path: '/organizationAdmins',
+    route: OrganizationAdminRoutes,
   },
   {
     path: '/auth',
