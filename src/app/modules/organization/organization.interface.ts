@@ -9,7 +9,6 @@ export interface IOrganization {
 
   organizationAddress: string;
 
-  isActive: boolean;
   isDeleted: boolean;
 
   organizationAdmin: Types.ObjectId | null; // organizationAdmin _id

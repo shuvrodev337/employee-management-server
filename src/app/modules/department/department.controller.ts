@@ -18,11 +18,8 @@ const createDepartment = catchAsync(async (req, res) => {
   });
 });
 const getAllDepartments = catchAsync(async (req, res) => {
-  const { userId, organization } = req.user;
-  const result = await DepartmentServices.getAllDepartmentsFromDb(
-    userId,
-    organization,
-  );
+  const { organization } = req.user;
+  const result = await DepartmentServices.getAllDepartmentsFromDb(organization);
   sendResponse(res, {
     success: true,
     message: 'Departments retrieved successfully',

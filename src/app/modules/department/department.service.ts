@@ -24,10 +24,7 @@ const createDepartmentIntoDb = async (
   const result = await Department.create(department);
   return result;
 };
-const getAllDepartmentsFromDb = async (
-  userId: string,
-  organization_Id: string,
-) => {
+const getAllDepartmentsFromDb = async (organization_Id: string) => {
   const departments = await Department.find({ organization: organization_Id });
 
   return departments;

@@ -33,10 +33,7 @@ const organizationSchema = new Schema<IOrganization, OrganizationModel>({
     // required: true,
     default: null,
   },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
+
   isDeleted: {
     type: Boolean,
     default: false,
