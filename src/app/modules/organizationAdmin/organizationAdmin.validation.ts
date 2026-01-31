@@ -29,9 +29,8 @@ const createOrganizationAdminValidationSchema = z.object({
   }),
 });
 const updateOrganizationAdminValidationSchema = z.object({
-  organizationAdmin: z.object({
-    password: z.string().max(20).optional(),
-    employee: z.object({
+  body: z.object({
+    organizationAdmin: z.object({
       name: updateUserNameValidationSchema.optional(),
       gender: z.enum(['male', 'female', 'other']).optional(),
       dateOfBirth: dateString.optional(),
@@ -48,6 +47,7 @@ const updateOrganizationAdminValidationSchema = z.object({
       // organizationName: z.string().optional(),
       // organizationEmail: z.string().email().optional(),
       // organizationContactNo: z.string().optional(),
+
       // organizationAddress: z.string().optional(),
     }),
   }),
