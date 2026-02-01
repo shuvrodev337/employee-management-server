@@ -7,6 +7,7 @@ import { DepartmentRoutes } from '../modules/department/department.routes';
 import { DesignationRoutes } from '../modules/designation/designation.routes';
 import { OrganizationRoutes } from '../modules/organization/organization.routes';
 import { OrganizationAdminRoutes } from '../modules/organizationAdmin/organizationAdmin.routes';
+import { AttendanceRoutes } from '../modules/attendance/attendance.routes';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -37,6 +38,10 @@ const moduleRoutes = [
   {
     path: '/organizationAdmins',
     route: OrganizationAdminRoutes,
+  },
+  {
+    path: '/attendance',
+    route: AttendanceRoutes,
   },
   {
     path: '/auth',

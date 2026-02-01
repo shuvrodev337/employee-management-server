@@ -102,6 +102,21 @@ const attendanceSchema = new Schema<IAttendance>(
 attendanceSchema.index({ user: 1, date: 1 }, { unique: true });
 
 /* ---------------------------- Schema Guards ------------------------------- */
+// filter out deleted documents
+attendanceSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+attendanceSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+attendanceSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 /**
  * Prevent admin & employee both being set

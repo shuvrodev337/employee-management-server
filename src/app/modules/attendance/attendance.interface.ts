@@ -8,6 +8,15 @@ export type TAttendanceStatus =
   | 'leave'
   | 'holiday'
   | 'weekend';
+
+export type TAttendanceQuery = {
+  page?: number;
+  limit?: number;
+  startDate?: string;
+  endDate?: string;
+  status?: 'present' | 'absent' | 'late';
+};
+
 export interface IAttendance {
   user: Types.ObjectId;
 
